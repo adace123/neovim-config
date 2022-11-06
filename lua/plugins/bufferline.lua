@@ -18,7 +18,7 @@ bufferline.setup({
 			end
 			return s
 		end,
-		numbers = "ordinal",
+		numbers = "none",
 		separator_style = "slant",
 	},
 })

@@ -16,7 +16,7 @@ end
 vim.api.nvim_set_keymap("n", "<Space>", "", {})
 vim.g.mapleader = " "
 
-M.base_mappings = {
+local base_mappings = {
 	i = {
 		-- remap escape
 		["jj"] = "<Esc>",
@@ -94,7 +94,7 @@ M.base_mappings = {
 	},
 }
 
-M.extra_mappings = {
+local extra_mappings = {
 	n = {
 		-- Comment.nvim
 		["<Leader>/"] = "<cmd>lua require('Comment.api').toggle.linewise.current()<CR>",
@@ -106,8 +106,8 @@ M.extra_mappings = {
 }
 
 function M.setup()
-	M.map(M.base_mappings)
-	M.map(M.extra_mappings)
+	M.map(base_mappings)
+	M.map(extra_mappings)
 end
 
 return M
