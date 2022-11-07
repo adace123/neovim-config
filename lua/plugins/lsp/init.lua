@@ -4,13 +4,13 @@ local status_ok_mason_tool_installer, mason_tool_installer = pcall(require, "mas
 local status_ok_lspconfig, lspconfig = pcall(require, "lspconfig")
 
 local missing_required_packages = (
-	not status_ok_lspconfig
-	or not status_ok_mason
-	or not status_ok_mason_lspconfig
-	or not status_ok_mason_tool_installer
-)
+    not status_ok_lspconfig
+        or not status_ok_mason
+        or not status_ok_mason_lspconfig
+        or not status_ok_mason_tool_installer
+    )
 if missing_required_packages then
-	return
+  return
 end
 
 mason.setup({})
@@ -18,58 +18,59 @@ mason.setup({})
 local handlers = require("plugins/lsp/handlers")
 
 local mason_tools = {
-	-- servers
-	"gopls",
-	"json-lsp",
-	"python-lsp-server",
-	"rust-analyzer",
-	"lua-language-server",
-	"yaml-language-server",
-	"bash-language-server",
-	"zls",
-	"rnix-lsp",
-	"typescript-language-server",
+  -- servers
+  "gopls",
+  "json-lsp",
+  "python-lsp-server",
+  "rust-analyzer",
+  "lua-language-server",
+  "yaml-language-server",
+  "bash-language-server",
+  "zls",
+  "rnix-lsp",
+  "typescript-language-server",
+  "taplo",
 
-	-- formatters
-	"stylua",
-	"black",
-	"isort",
-	"shellcheck",
-	"selene",
-	"autopep8",
-	"prettier",
-	"yamlfmt",
-	"yamllint",
+  -- formatters
+  "stylua",
+  "black",
+  "isort",
+  "shellcheck",
+  "selene",
+  "autopep8",
+  "prettier",
+  "yamlfmt",
+  "yamllint",
 }
 
 mason_tool_installer.setup({
-	ensure_installed = mason_tools,
-	run_on_start = true,
-	automatic_installation = true,
+  ensure_installed = mason_tools,
+  run_on_start = true,
+  automatic_installation = true,
 })
 
 mason_lsp_config.setup_handlers({
-	function(server_name)
-		local opts = {
-			on_attach = handlers.on_attach,
-			capabilities = handlers.capabilities,
-		}
-		local use_default_setup = true
+  function(server_name)
+    local opts = {
+      on_attach = handlers.on_attach,
+      capabilities = handlers.capabilities,
+    }
+    local use_default_setup = true
 
-		local status_ok, lsp_settings = pcall(require, "plugins/lsp/settings/" .. server_name)
-		if status_ok then
-			if lsp_settings.override_default_setup then
-				use_default_setup = false
-				lsp_settings.setup(opts)
-			else
-				vim.tbl_deep_extend("force", lsp_settings, opts)
-			end
-		end
+    local status_ok, lsp_settings = pcall(require, "plugins/lsp/settings/" .. server_name)
+    if status_ok then
+      if lsp_settings.override_default_setup then
+        use_default_setup = false
+        lsp_settings.setup(opts)
+      else
+        vim.tbl_deep_extend("force", lsp_settings, opts)
+      end
+    end
 
-		if use_default_setup then
-			lspconfig[server_name].setup(opts)
-		end
-	end,
+    if use_default_setup then
+      lspconfig[server_name].setup(opts)
+    end
+  end,
 })
 
 handlers.setup()

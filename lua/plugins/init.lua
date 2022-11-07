@@ -91,6 +91,7 @@ local plugins = {
       })
     end,
   },
+  ["glepnir/lspsaga"] = {},
 
   -- buffers
   ["akinsho/bufferline.nvim"] = {
@@ -98,6 +99,13 @@ local plugins = {
       require("plugins/bufferline")
     end,
     tag = "v3.1.0",
+  },
+
+  -- tabs
+  ["tiagovla/scope.nvim"] = {
+    config = function()
+      require("scope").setup({})
+    end,
   },
 
   -- utils
