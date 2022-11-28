@@ -22,6 +22,7 @@ local options = {
 	updatetime = 300,
 	wrap = false,
 	lazyredraw = true,
+	incsearch = true,
 	fillchars = { eob = " " },
 	pumheight = 10,
 	scrolloff = 8,

@@ -69,7 +69,7 @@ function M.set_autocmds(client, bufnr)
 		})
 	end
 
-	if select_client("textDocument/documentHighlight") then
+	if client.supports_method("textDocument/documentHighlight") then
 		vim.api.nvim_create_autocmd("CursorHold", {
 			pattern = "*",
 			callback = function()

@@ -1,7 +1,15 @@
 local M = {}
 local opts = { noremap = true, silent = true }
 
-M.map = function(map_table, extra_opts)
+M.map = function(map_table, extra_opts, required_package)
+  if required_package then
+    local status_ok, _ = pcall(require, required_package)
+    if not status_ok then
+      vim.notify("Could not set mappings for " .. required_package)
+      return
+    end
+  end
+
   if extra_opts ~= nil and next(extra_opts) ~= nil then
     opts = vim.tbl_deep_extend("force", opts, extra_opts)
   end
@@ -16,7 +24,7 @@ end
 vim.api.nvim_set_keymap("n", "<Space>", "", {})
 vim.g.mapleader = " "
 
-local base_mappings = {
+local core_mappings = {
   i = {
     -- remap escape
     ["jj"] = "<Esc>",
@@ -52,7 +60,14 @@ local base_mappings = {
     ["<C-p>"] = "o<Esc>p",
 
     -- delete buffer
-    ["<S-x>"] = ":bdelete<CR>",
+    ["<S-x>"] = function()
+      local status_ok, bufdelete = pcall(require, "bufdelete")
+      if status_ok then
+        bufdelete.bufdelete(0, false)
+      else
+        vim.api.nvim_command(":bdelete<cr>")
+      end
+    end,
 
     -- buffer navigation
     ["<S-l>"] = ":bnext<CR>",
@@ -60,7 +75,7 @@ local base_mappings = {
 
     -- tab indentation
     ["<Tab>"] = ">>_",
-    ["S-Tab"] = "<<_",
+    ["<S-Tab>"] = "<<_",
 
     -- save
     ["<C-s>"] = "<cmd>w!<cr>",
@@ -87,27 +102,38 @@ local base_mappings = {
 
     -- tab indentation
     ["<Tab>"] = ">>_",
-    ["S-Tab"] = "<<_",
+    ["<S-Tab>"] = "<<_",
 
     -- reload config
     ["<Leader>t"] = "<cmd>luafile %<CR>",
   },
 }
 
-local extra_mappings = {
+local comment_mappings = {
   n = {
-    -- Comment.nvim
     ["<Leader>/"] = "<cmd>lua require('Comment.api').toggle.linewise.current()<CR>",
   },
   v = {
-    -- Comment.nvim
     ["<Leader>/"] = "<Plug>(comment_toggle_linewise_visual)",
   },
 }
 
+local neotree_mappings = {
+  n = {
+    ["<Leader>e"] = "<cmd>Neotree toggle<CR>",
+  },
+}
+
+local all_mappings = {
+  core_mappings,
+  comment_mappings,
+  neotree_mappings,
+}
+
 function M.setup()
-  M.map(base_mappings)
-  M.map(extra_mappings)
+  for _, mapping in pairs(all_mappings) do
+    M.map(mapping)
+  end
 end
 
 return M

@@ -91,7 +91,6 @@ local plugins = {
       })
     end,
   },
-  ["glepnir/lspsaga"] = {},
 
   -- buffers
   ["akinsho/bufferline.nvim"] = {
@@ -100,11 +99,12 @@ local plugins = {
     end,
     tag = "v3.1.0",
   },
+  ["famiu/bufdelete.nvim"] = {},
 
   -- tabs
   ["tiagovla/scope.nvim"] = {
     config = function()
-      require("scope").setup({})
+      require("scope").setup()
     end,
   },
 
@@ -189,6 +189,18 @@ local plugins = {
           border = "rounded",
         },
       })
+    end,
+  },
+
+  -- file explorer
+  ["nvim-neo-tree/neo-tree.nvim"] = {
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "kyazdani142/nvim-web-devicons",
+      "MunifTanjim/nui.nvim",
+    },
+    config = function()
+      require("plugins/neo-tree")
     end,
   },
 }
