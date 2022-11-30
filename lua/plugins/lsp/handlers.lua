@@ -32,8 +32,8 @@ function M.set_keymaps(bufnr)
 	local buf_mappings = {
 		n = {
 			["gd"] = vim.lsp.buf.definition,
-			["gr"] = vim.lsp.buf.rename,
-			["gR"] = vim.lsp.buf.references,
+			["gR"] = vim.lsp.buf.rename,
+			["gr"] = vim.lsp.buf.references,
 			["gy"] = vim.lsp.buf.type_definition,
 			["K"] = vim.lsp.buf.hover,
 			["ga"] = vim.lsp.buf.code_action,

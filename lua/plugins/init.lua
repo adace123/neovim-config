@@ -179,6 +179,9 @@ local plugins = {
 
   -- themes
   ["rebelot/kanagawa.nvim"] = {},
+  ["catppuccin/nvim"] = {},
+  ["ellisonleao/gruvbox.nvim"] = {},
+  ["folke/tokyonight.nvim"] = {},
 
   -- git
   ["lewis6991/gitsigns.nvim"] = {
@@ -201,6 +204,21 @@ local plugins = {
     },
     config = function()
       require("plugins/neo-tree")
+    end,
+  },
+
+  -- which-key
+  ["folke/which-key.nvim"] = {
+    config = function()
+      require("plugins/which-key")
+    end,
+  },
+
+  -- surround
+  ["kylechui/nvim-surround"] = {
+    tag = "*",
+    config = function()
+      require("nvim-surround").setup({})
     end,
   },
 }

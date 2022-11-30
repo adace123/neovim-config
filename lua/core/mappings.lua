@@ -84,9 +84,6 @@ local core_mappings = {
     ["<CR>"] = "o<Esc>",
     ["<BS>"] = "dd",
 
-    -- turn off highlighting
-    ["<Leader>h"] = "<cmd>noh<CR>",
-
     -- quit
     ["<C-x>"] = "<cmd>q!<CR>",
   },
@@ -103,37 +100,11 @@ local core_mappings = {
     -- tab indentation
     ["<Tab>"] = ">>_",
     ["<S-Tab>"] = "<<_",
-
-    -- reload config
-    ["<Leader>t"] = "<cmd>luafile %<CR>",
   },
-}
-
-local comment_mappings = {
-  n = {
-    ["<Leader>/"] = "<cmd>lua require('Comment.api').toggle.linewise.current()<CR>",
-  },
-  v = {
-    ["<Leader>/"] = "<Plug>(comment_toggle_linewise_visual)",
-  },
-}
-
-local neotree_mappings = {
-  n = {
-    ["<Leader>e"] = "<cmd>Neotree toggle<CR>",
-  },
-}
-
-local all_mappings = {
-  core_mappings,
-  comment_mappings,
-  neotree_mappings,
 }
 
 function M.setup()
-  for _, mapping in pairs(all_mappings) do
-    M.map(mapping)
-  end
+  M.map(core_mappings)
 end
 
 return M
