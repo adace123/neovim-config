@@ -18,20 +18,6 @@ if not status_ok then
   return
 end
 
--- Autocommand that reloads neovim whenever you save the plugins/init.lua file
-local group = vim.api.nvim_create_augroup("packer_user_config", { clear = true })
-
-vim.api.nvim_create_autocmd("BufWritePost", {
-  pattern = { "*/nvim/lua/plugins/init.lua" },
-  group = group,
-  callback = function()
-    local bufname = vim.api.nvim_buf_get_name(0)
-    if bufname ~= "init.lua" then
-      vim.cmd([[source <afile> | PackerSync]])
-    end
-  end,
-})
-
 packer.init({
   snapshot_path = vim.fn.stdpath("config") .. "/snapshots",
   max_jobs = 50,
@@ -182,6 +168,11 @@ local plugins = {
   ["catppuccin/nvim"] = {},
   ["ellisonleao/gruvbox.nvim"] = {},
   ["folke/tokyonight.nvim"] = {},
+  ["tanvirtin/monokai.nvim"] = {},
+  ["sainnhe/gruvbox-material"] = {},
+  ["projekt0n/github-nvim-theme"] = {},
+  ["shaunsingh/nord.nvim"] = {},
+  ["LunarVim/horizon.nvim"] = {},
 
   -- git
   ["lewis6991/gitsigns.nvim"] = {
@@ -196,14 +187,9 @@ local plugins = {
   },
 
   -- file explorer
-  ["nvim-neo-tree/neo-tree.nvim"] = {
-    requires = {
-      "nvim-lua/plenary.nvim",
-      "kyazdani142/nvim-web-devicons",
-      "MunifTanjim/nui.nvim",
-    },
+  ["nvim-tree/nvim-tree.lua"] = {
     config = function()
-      require("plugins/neo-tree")
+      require("plugins/nvim-tree")
     end,
   },
 
@@ -220,6 +206,42 @@ local plugins = {
     config = function()
       require("nvim-surround").setup({})
     end,
+  },
+
+  -- telescope
+  ["nvim-telescope/telescope.nvim"] = {
+    config = function()
+      require("plugins/telescope")
+    end,
+    requires = {
+      { "nvim-lua/plenary.nvim" },
+    },
+  },
+  ["nvim-telescope/telescope-frecency.nvim"] = {
+    requires = {
+      { "nvim-telescope/telescope.nvim" },
+      { "kkharji/sqlite.lua" },
+    },
+  },
+  ["jvgrootveld/telescope-zoxide"] = {
+    requires = {
+      { "nvim-telescope/telescope.nvim" },
+      { "kkharji/sqlite.lua" },
+    },
+  },
+
+  -- projects
+  ["ahmedkhalf/project.nvim"] = {
+    config = function()
+      require("project_nvim").setup({})
+    end,
+  },
+
+  -- sessions
+  ["Shatur/neovim-session-manager"] = {
+    requires = {
+      "nvim-lua/plenary.nvim",
+    },
   },
 }
 
