@@ -11,6 +11,9 @@ local config = {
 		enable = true,
 	},
 	open_on_setup = true,
+	ignore_ft_on_setup = {
+		"alpha",
+	},
 	filters = {
 		custom = { ".git" },
 		exclude = { ".gitignore" },
