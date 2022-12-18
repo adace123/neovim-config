@@ -29,6 +29,7 @@ local mason_tools = {
   "zls",
   "typescript-language-server",
   "taplo",
+  "rnix-lsp",
 
   -- formatters
   "stylua",
@@ -81,6 +82,6 @@ mason_lsp_config.setup_handlers({
 
 handlers.setup()
 
-for _, server_name in pairs(lsp_extra) do
-  setup_lsp_server(server_name)
-end
+-- for _, server_name in pairs(lsp_extra) do
+--   setup_lsp_server(server_name)
+--end

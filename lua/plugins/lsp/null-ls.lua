@@ -43,6 +43,7 @@ function M.setup()
       -- code actions
       code_actions.eslint,
       code_actions.gitsigns,
+      code_actions.statix,
 
       -- hover
       hover.printenv,
