@@ -30,6 +30,7 @@ local mason_tools = {
   "typescript-language-server",
   "taplo",
   "rnix-lsp",
+  "terraform-ls",
 
   -- formatters
   "stylua",

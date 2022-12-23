@@ -28,6 +28,7 @@ function M.setup()
       formatters.goimports,
       formatters.autopep8,
       formatters.taplo,
+      formatters.terraform_fmt,
 
       -- diagnostics
       diagnostics.flake8.with({ extra_args = { "--max-line-length=100" } }),

@@ -1,3 +1,5 @@
+local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   PACKER_BOOTSTRAP = vim.fn.system({
     "git",
@@ -236,7 +238,18 @@ local plugins = {
   },
 
   -- sessions
-  ["Shatur/neovim-session-manager"] = {
+  ["rmagatti/auto-session"] = {
+    config = function()
+      require("plugins/session")
+    end,
+  },
+  ["rmagatti/session-lens"] = {
+    requires = { "rmagatti/auto-session", "nvim-telescope/telescope.nvim" },
+    config = require("session-lens").setup({}),
+  },
+
+  -- git
+  ["sindrets/diffview.nvim"] = {
     requires = {
       "nvim-lua/plenary.nvim",
     },

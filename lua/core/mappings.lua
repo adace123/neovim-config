@@ -58,6 +58,7 @@ local core_mappings = {
   n = {
     -- paste on new line
     ["<C-p>"] = "o<Esc>p",
+    ["<C-P>"] = "O<Esc>p",
 
     -- delete buffer
     ["<S-x>"] = function()
