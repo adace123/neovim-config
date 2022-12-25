@@ -27,6 +27,7 @@ local normal = {
       c = { "<cmd>Telescope colorscheme<CR>", "Colorscheme" },
       w = { "<cmd>Telescope live_grep<CR>", "Find Text" },
       s = { "<cmd>Telescope grep_string<CR>", "Find String" },
+      S = { "<cmd>SearchSession<CR>", "Find Session" },
       g = {
         name = "Git",
         s = { "<cmd>Telescope git_status<CR>", "Status" },
