@@ -1,41 +1,33 @@
-local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-	PACKER_BOOTSTRAP = vim.fn.system({
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+	vim.fn.system({
 		"git",
 		"clone",
-		"--depth",
-		"1",
-		"https://github.com/wbthomason/packer.nvim",
-		install_path,
+		"--filter=blob:none",
+		"--single-branch",
+		"https://github.com/folke/lazy.nvim.git",
+		lazypath,
 	})
-	print("Installing packer, close and reopen Neovim...")
-	vim.cmd([[packadd packer.nvim]])
 end
+vim.opt.runtimepath:prepend(lazypath)
 
-local status_ok, packer = pcall(require, "packer")
+local status_ok, lazy = pcall(require, "lazy")
 if not status_ok then
 	return
 end
 
-packer.init({
-	snapshot_path = vim.fn.stdpath("config") .. "/snapshots",
-	max_jobs = 50,
-	display = {
-		open_fn = function()
-			return require("packer.util").float({ border = "rounded" })
-		end,
-		prompt_border = "rounded",
+local lazy_plugins = {
+	{
+		"folke/lazy.nvim",
 	},
-})
-
-local plugins = {
-	["wbthomason/packer.nvim"] = {},
-	["lewis6991/impatient.nvim"] = {},
+	{
+		"lewis6991/impatient.nvim",
+	},
 
 	-- lsp
-	["neovim/nvim-lspconfig"] = {
-		requires = {
+	{
+		"neovim/nvim-lspconfig",
+		dependencies = {
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 			"whoIsSethDaniel/mason-tool-installer.nvim",
@@ -45,29 +37,36 @@ local plugins = {
 			require("plugins/lsp")
 		end,
 	},
-	["jose-elias-alvarez/null-ls.nvim"] = {
-		requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+	{
+		"jose-elias-alvarez/null-ls.nvim",
 		config = function()
 			require("plugins/lsp/null-ls").setup()
 		end,
+		dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
 	},
-	["nvim-treesitter/nvim-treesitter"] = {
+	{
+		"nvim-treesitter/nvim-treesitter",
 		config = function()
 			require("plugins/treesitter").setup()
 		end,
 	},
-	["RRethy/vim-illuminate"] = {
+	{
+		"RRethy/vim-illuminate",
 		config = function()
 			require("illuminate").configure({})
 		end,
 	},
-	["j-hui/fidget.nvim"] = {
+	{
+		"j-hui/fidget.nvim",
 		config = function()
 			require("fidget").setup({})
 		end,
 	},
-	["simrat39/rust-tools.nvim"] = {},
-	["Saecki/crates.nvim"] = {
+	{
+		"simrat39/rust-tools.nvim",
+	},
+	{
+		"Saecki/crates.nvim",
 		config = function()
 			require("crates").setup({
 				null_ls = {
@@ -77,191 +76,223 @@ local plugins = {
 			})
 		end,
 	},
+	{
+		"folke/trouble.nvim",
+		config = function()
+			require("trouble").setup()
+		end,
+	},
+	{
+		"folke/neodev.nvim",
+		config = function()
+			require("neodev").setup()
+		end,
+	},
 
 	-- buffers
-	["akinsho/bufferline.nvim"] = {
+	{
+		"akinsho/bufferline.nvim",
 		config = function()
 			require("plugins/bufferline")
 		end,
-		tag = "v3.1.0",
 	},
-	["famiu/bufdelete.nvim"] = {},
+	{
+		"famiu/bufdelete.nvim",
+	},
 
 	-- tabs
-	["tiagovla/scope.nvim"] = {
+	{
+		"tiagovla/scope.nvim",
 		config = function()
 			require("scope").setup()
 		end,
 	},
 
 	-- utils
-	["nvim-lua/lsp-status.nvim"] = {},
-	["nvim-lua/plenary.nvim"] = {},
-
-	["windwp/nvim-autopairs"] = {
+	{
+		"nvim-lua/lsp-status.nvim",
+	},
+	{
+		"nvim-lua/plenary.nvim",
+	},
+	{
+		"windwp/nvim-autopairs",
 		config = function()
 			require("plugins/autopairs")
 		end,
 	},
-	["numToStr/Comment.nvim"] = {
+	{
+		"numToStr/Comment.nvim",
 		config = function()
 			require("Comment").setup({
 				ignore = "^$",
 			})
 		end,
 	},
-	["stevearc/aerial.nvim"] = {
+	{
+		"stevearc/aerial.nvim",
 		config = function()
-			require("aerial").setup({})
+			require("aerial").setup()
 		end,
 	},
-	["SmiteshP/nvim-navic"] = {},
-	["folke/trouble.nvim"] = {
-		config = function()
-			require("trouble").setup({})
-		end,
+	{
+		"SmiteshP/nvim-navic",
 	},
-	["folke/neodev.nvim"] = {
-		config = function()
-			require("neodev").setup({})
-		end,
-	},
-
-	-- notifications
-	["rcarriga/nvim-notify"] = {
-		config = function()
-			local notify = require("notify")
-			notify.setup({})
-			vim.notify = notify
-		end,
+	{
+		"SmiteshP/nvim-navic",
 	},
 
 	-- completion
-	["hrsh7th/nvim-cmp"] = {
+	{
+		"hrsh7th/nvim-cmp",
 		config = function()
 			require("plugins/cmp")
 		end,
 	},
-	["hrsh7th/cmp-nvim-lsp-signature-help"] = {},
-	["hrsh7th/cmp-nvim-lsp"] = {},
-	["hrsh7th/cmp-path"] = {},
-	["hrsh7th/cmp-buffer"] = {},
-	["hrsh7th/cmp-cmdline"] = {},
-	["nvim-lualine/lualine.nvim"] = {
+	{
+		"hrsh7th/cmp-nvim-lsp-signature-help",
+	},
+	{
+		"hrsh7th/cmp-nvim-lsp",
+	},
+	{
+		"hrsh7th/cmp-path",
+	},
+	{
+		"hrsh7th/cmp-buffer",
+	},
+	{
+		"hrsh7th/cmp-cmdline",
+	},
+	{
+		"nvim-lualine/lualine.nvim",
 		config = function()
 			require("lualine").setup({})
 		end,
 	},
-	["L3MON4D3/LuaSnip"] = {},
-	["rafamadriz/friendly-snippets"] = {},
+	{
+		"L3MON4D3/LuaSnip",
+	},
+	{
+		"rafamadriz/friendly-snippets",
+	},
 
 	-- icons
-	["nvim-tree/nvim-web-devicons"] = {
+	{
+		"nvim-tree/nvim-web-devicons",
 		config = function()
-			require("nvim-web-devicons").setup({})
+			require("nvim-web-devicons").setup()
 		end,
 	},
-	["ryanoasis/vim-devicons"] = {},
+	{
+		"ryanoasis/vim-devicons",
+	},
 
 	-- themes
-	["rebelot/kanagawa.nvim"] = {},
-	["catppuccin/nvim"] = {},
-	["ellisonleao/gruvbox.nvim"] = {},
-	["folke/tokyonight.nvim"] = {},
-	["tanvirtin/monokai.nvim"] = {},
-	["sainnhe/gruvbox-material"] = {},
-	["projekt0n/github-nvim-theme"] = {},
-	["shaunsingh/nord.nvim"] = {},
-	["LunarVim/horizon.nvim"] = {},
+	{
+		"rebelot/kanagawa.nvim",
+	},
+	{
+		"catppuccin/nvim",
+	},
+	{
+		"ellisonleao/gruvbox.nvim",
+	},
+	{
+		"folke/tokyonight.nvim",
+	},
+	{
+		"projekt0n/github-nvim-theme",
+	},
+	{
+		"shaunsingh/nord.nvim",
+	},
 
 	-- git
-	["lewis6991/gitsigns.nvim"] = {
+	{
+		"lewis6991/gitsigns.nvim",
 		config = function()
 			require("gitsigns").setup({
-				sign_priority = 100,
+				sign_priority = 75,
 				preview_config = {
 					border = "rounded",
 				},
 			})
 		end,
 	},
+	{
+		"sindrets/diffview.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+	},
 
 	-- file explorer
-	["nvim-tree/nvim-tree.lua"] = {
+	{
+		"nvim-tree/nvim-tree.lua",
 		config = function()
 			require("plugins/nvim-tree")
 		end,
 	},
 
 	-- which-key
-	["folke/which-key.nvim"] = {
+	{
+		"folke/which-key.nvim",
 		config = function()
 			require("plugins/which-key")
 		end,
 	},
 
 	-- surround
-	["kylechui/nvim-surround"] = {
-		tag = "*",
+	{
+		"kylechui/nvim-surround",
 		config = function()
-			require("nvim-surround").setup({})
+			require("nvim-surround").setup()
 		end,
 	},
-
-	-- telescope
-	["nvim-telescope/telescope.nvim"] = {
+	{
+		"nvim-telescope/telescope.nvim",
 		config = function()
 			require("plugins/telescope")
 		end,
-		requires = {
-			{ "nvim-lua/plenary.nvim" },
-		},
+		dependencies = { "nvim-lua/plenary.nvim" },
 	},
-	["nvim-telescope/telescope-frecency.nvim"] = {
-		requires = {
+	{
+		"nvim-telescope/telescope-frecency.nvim",
+		dependencies = {
 			{ "nvim-telescope/telescope.nvim" },
 			{ "kkharji/sqlite.lua" },
 		},
 	},
-	["jvgrootveld/telescope-zoxide"] = {
-		requires = {
+	{
+		"jvgrootveld/telescope-zoxide",
+		dependencies = {
 			{ "nvim-telescope/telescope.nvim" },
 			{ "kkharji/sqlite.lua" },
 		},
 	},
 
 	-- projects
-	["ahmedkhalf/project.nvim"] = {
+	{
+		"ahmedkhalf/project.nvim",
 		config = function()
-			require("project_nvim").setup({})
+			require("project_nvim").setup()
 		end,
 	},
 
 	-- sessions
-	["rmagatti/auto-session"] = {
+	{
+		"rmagatti/auto-session",
 		config = function()
 			require("plugins/session")
 		end,
 	},
-	["rmagatti/session-lens"] = {
+	{
+		"rmagatti/session-lens",
 		config = function()
 			require("session-lens").setup({
 				previewer = true,
 			})
 		end,
 	},
-
-	-- git
-	["sindrets/diffview.nvim"] = {
-		requires = {
-			"nvim-lua/plenary.nvim",
-		},
-	},
 }
 
-return packer.startup(function(use)
-	for name, plugin in pairs(plugins) do
-		plugin[1] = name
-		use(plugin)
-	end
-end)
+return lazy.setup(lazy_plugins, {})

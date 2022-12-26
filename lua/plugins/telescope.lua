@@ -38,7 +38,6 @@ local extensions = {
   "frecency",
   "projects",
   "zoxide",
-  "session-lens",
 }
 
 for _, ext in pairs(extensions) do
