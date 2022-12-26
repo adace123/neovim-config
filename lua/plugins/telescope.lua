@@ -30,6 +30,7 @@ telescope.setup({
     },
     find_files = {
       theme = "dropdown",
+      hidden = true,
     },
   },
 })
